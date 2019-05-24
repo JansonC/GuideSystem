@@ -94,7 +94,7 @@ class GuideManager {
             return;
         }
         let name: string = obj.getObjName();
-        if (!DMUtils.isNull(this.componentMap[name])) {
+        if (!Utils.isNull(this.componentMap[name])) {
             return;
         }
         this.componentMap[name] = obj;
@@ -196,8 +196,10 @@ class GuideManager {
         if (this.nextStep < this.guideQueue.length && this.guideQueue[this.nextStep]) {
             let data: GuideStepData = this.dataArray[this.nextStep];
             let component: IGuideComponent = this.guideQueue[this.nextStep];
-            component.guideProcess(data);
             this.curStep = this.nextStep;
+            setTimeout(function () {
+                component.guideProcess(data);
+            }, 50);
         } else {
             // 若无法执行欲跳转到的步骤, 则不改变curStep
             if (this.nextStep === this.stepArray.length) {
@@ -238,19 +240,19 @@ class GuideManager {
      * @param {egret.DisplayObjectContainer} parent
      */
     public static showScreenMask(obj: egret.DisplayObjectContainer, parent?: egret.DisplayObjectContainer, maskColor?: number, maskAlpha?: number): void {
-        if (DMUtils.isNull(parent)) {
+        if (Utils.isNull(parent)) {
             parent = this.stage;
-            if (DMUtils.isNull(parent)) {
+            if (Utils.isNull(parent)) {
                 return;
             }
         }
         let w: number = parent === this.stage ? this.stage.width : parent.width;
         let h: number = parent === this.stage ? this.stage.height : parent.height;
-        if (DMUtils.isNull(this.screenMask)) {
-            if (DMUtils.isNull(maskColor)) {
+        if (Utils.isNull(this.screenMask)) {
+            if (Utils.isNull(maskColor)) {
                 maskColor = 0x000000;
             }
-            if (DMUtils.isNull(maskAlpha)) {
+            if (Utils.isNull(maskAlpha)) {
                 maskAlpha = 0.4;
             }
 
@@ -293,7 +295,7 @@ class GuideManager {
      */
     public static hideScreenMask(): void {
         let screenMask = this.screenMask;
-        if (!DMUtils.isNull(screenMask) && !DMUtils.isNull(screenMask.parent)) {
+        if (!Utils.isNull(screenMask) && !Utils.isNull(screenMask.parent)) {
             if (screenMask.parent.getChildIndex(screenMask) >= 0) {
                 screenMask.parent.removeChild(screenMask);
             }
@@ -307,14 +309,14 @@ class GuideManager {
      * @param {egret.DisplayObjectContainer} parent
      */
     public static showBorderLight(obj: egret.DisplayObjectContainer, parent?: egret.DisplayObjectContainer): void {
-        if (DMUtils.isNull(parent)) {
+        if (Utils.isNull(parent)) {
             parent = this.stage;
-            if (DMUtils.isNull(parent)) {
+            if (Utils.isNull(parent)) {
                 return;
             }
         }
 
-        if (DMUtils.isNull(this.borderLight)) {
+        if (Utils.isNull(this.borderLight)) {
             this.borderLight = new egret.Shape();
             this.borderLight.filters = [new egret.GlowFilter(0xff911b, 1, 8, 8, 5)];
         }
@@ -327,7 +329,7 @@ class GuideManager {
         borderLight.y = rec.y - 2;
 
         let filter = borderLight.filters[0];
-        if (!DMUtils.isNull(filter)) {
+        if (!Utils.isNull(filter)) {
             egret.Tween.get(filter, {loop: true}).to({alpha: 1}, 700).to({alpha: 0.3}, 700).to({alpha: 1}, 700);
         }
 
@@ -347,9 +349,9 @@ class GuideManager {
      */
     public static hideBorder(): void {
         let borderLight = this.borderLight;
-        if (!DMUtils.isNull(borderLight) && !DMUtils.isNull(borderLight.parent)) {
+        if (!Utils.isNull(borderLight) && !Utils.isNull(borderLight.parent)) {
             let filter = borderLight.filters[0];
-            if (!DMUtils.isNull(filter)) {
+            if (!Utils.isNull(filter)) {
                 egret.Tween.removeTweens(filter);
             }
             if (borderLight.parent.getChildIndex(borderLight) >= 0) {
@@ -364,7 +366,7 @@ class GuideManager {
      * @param {IGuideComponent} step
      */
     private static doClear(step: IGuideComponent): void {
-        if (!DMUtils.isNull(step)) {
+        if (!Utils.isNull(step)) {
             step.guideClear();
         }
         this.hideBorder();
@@ -376,7 +378,7 @@ class GuideManager {
      * @param {number} step
      */
     private static markFinish(step: number): void {
-        if (!DMUtils.isNull(this.finishList[step]) && this.finishList[step] === true) {
+        if (!Utils.isNull(this.finishList[step]) && this.finishList[step] === true) {
             return;
         }
         let obj: IGuideComponent = this.guideQueue[step];

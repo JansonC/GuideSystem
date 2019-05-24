@@ -31,7 +31,7 @@ var GuideManager = /** @class */ (function () {
             return;
         }
         var name = obj.getObjName();
-        if (!DMUtils.isNull(this.componentMap[name])) {
+        if (!Utils.isNull(this.componentMap[name])) {
             return;
         }
         this.componentMap[name] = obj;
@@ -124,10 +124,12 @@ var GuideManager = /** @class */ (function () {
             this.markFinish(this.curStep);
         }
         if (this.nextStep < this.guideQueue.length && this.guideQueue[this.nextStep]) {
-            var data = this.dataArray[this.nextStep];
-            var component = this.guideQueue[this.nextStep];
-            component.guideProcess(data);
+            var data_1 = this.dataArray[this.nextStep];
+            var component_1 = this.guideQueue[this.nextStep];
             this.curStep = this.nextStep;
+            setTimeout(function () {
+                component_1.guideProcess(data_1);
+            }, 50);
         }
         else {
             // 若无法执行欲跳转到的步骤, 则不改变curStep
@@ -166,19 +168,19 @@ var GuideManager = /** @class */ (function () {
      * @param {egret.DisplayObjectContainer} parent
      */
     GuideManager.showScreenMask = function (obj, parent, maskColor, maskAlpha) {
-        if (DMUtils.isNull(parent)) {
+        if (Utils.isNull(parent)) {
             parent = this.stage;
-            if (DMUtils.isNull(parent)) {
+            if (Utils.isNull(parent)) {
                 return;
             }
         }
         var w = parent === this.stage ? this.stage.width : parent.width;
         var h = parent === this.stage ? this.stage.height : parent.height;
-        if (DMUtils.isNull(this.screenMask)) {
-            if (DMUtils.isNull(maskColor)) {
+        if (Utils.isNull(this.screenMask)) {
+            if (Utils.isNull(maskColor)) {
                 maskColor = 0x000000;
             }
-            if (DMUtils.isNull(maskAlpha)) {
+            if (Utils.isNull(maskAlpha)) {
                 maskAlpha = 0.4;
             }
             var container = new egret.DisplayObjectContainer();
@@ -214,7 +216,7 @@ var GuideManager = /** @class */ (function () {
      */
     GuideManager.hideScreenMask = function () {
         var screenMask = this.screenMask;
-        if (!DMUtils.isNull(screenMask) && !DMUtils.isNull(screenMask.parent)) {
+        if (!Utils.isNull(screenMask) && !Utils.isNull(screenMask.parent)) {
             if (screenMask.parent.getChildIndex(screenMask) >= 0) {
                 screenMask.parent.removeChild(screenMask);
             }
@@ -227,13 +229,13 @@ var GuideManager = /** @class */ (function () {
      * @param {egret.DisplayObjectContainer} parent
      */
     GuideManager.showBorderLight = function (obj, parent) {
-        if (DMUtils.isNull(parent)) {
+        if (Utils.isNull(parent)) {
             parent = this.stage;
-            if (DMUtils.isNull(parent)) {
+            if (Utils.isNull(parent)) {
                 return;
             }
         }
-        if (DMUtils.isNull(this.borderLight)) {
+        if (Utils.isNull(this.borderLight)) {
             this.borderLight = new egret.Shape();
             this.borderLight.filters = [new egret.GlowFilter(0xff911b, 1, 8, 8, 5)];
         }
@@ -244,7 +246,7 @@ var GuideManager = /** @class */ (function () {
         borderLight.x = rec.x - 2;
         borderLight.y = rec.y - 2;
         var filter = borderLight.filters[0];
-        if (!DMUtils.isNull(filter)) {
+        if (!Utils.isNull(filter)) {
             egret.Tween.get(filter, { loop: true }).to({ alpha: 1 }, 700).to({ alpha: 0.3 }, 700).to({ alpha: 1 }, 700);
         }
         var graphics = this.borderLight.graphics;
@@ -261,9 +263,9 @@ var GuideManager = /** @class */ (function () {
      */
     GuideManager.hideBorder = function () {
         var borderLight = this.borderLight;
-        if (!DMUtils.isNull(borderLight) && !DMUtils.isNull(borderLight.parent)) {
+        if (!Utils.isNull(borderLight) && !Utils.isNull(borderLight.parent)) {
             var filter = borderLight.filters[0];
-            if (!DMUtils.isNull(filter)) {
+            if (!Utils.isNull(filter)) {
                 egret.Tween.removeTweens(filter);
             }
             if (borderLight.parent.getChildIndex(borderLight) >= 0) {
@@ -277,7 +279,7 @@ var GuideManager = /** @class */ (function () {
      * @param {IGuideComponent} step
      */
     GuideManager.doClear = function (step) {
-        if (!DMUtils.isNull(step)) {
+        if (!Utils.isNull(step)) {
             step.guideClear();
         }
         this.hideBorder();
@@ -288,7 +290,7 @@ var GuideManager = /** @class */ (function () {
      * @param {number} step
      */
     GuideManager.markFinish = function (step) {
-        if (!DMUtils.isNull(this.finishList[step]) && this.finishList[step] === true) {
+        if (!Utils.isNull(this.finishList[step]) && this.finishList[step] === true) {
             return;
         }
         var obj = this.guideQueue[step];

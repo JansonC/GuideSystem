@@ -1,12 +1,12 @@
 var __reflect = (this && this.__reflect) || function (p, c, t) {
     p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
 };
-var DMUtils = (function () {
-    function DMUtils() {
+var Utils = (function () {
+    function Utils() {
     }
-    DMUtils.isNull = function (obj) {
+    Utils.isNull = function (obj) {
         return obj === null || obj === undefined;
     };
-    return DMUtils;
+    return Utils;
 }());
-__reflect(DMUtils.prototype, "DMUtils");
+__reflect(Utils.prototype, "Utils");
